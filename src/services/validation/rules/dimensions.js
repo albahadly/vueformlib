@@ -10,7 +10,7 @@ export default class dimensions extends Validator {
 
     return new Promise((resolve, reject) => {
       reader.onerror = () => {
-        temporaryFileReader.abort();
+        reader.abort();
         reject(new DOMException("File cannot be parsed."));
       };
 

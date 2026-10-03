@@ -19,8 +19,12 @@ export default function(actual, operator, expected, el$, form$) {
   switch (operator.toLowerCase()) {
     case '>':
       return isArray(actual)
-        ? actual.every(a => a > expected)
-        : actual > expected
+        ? strict
+          ? actual.every(a => a > expected && a !== null && a !== undefined && a !== '')
+          : actual.every(a => a > expected)
+        : strict
+          ? actual > expected && actual !== null && actual !== undefined && actual !== ''
+          : actual > expected
 
     case '>=':
       return isArray(actual)

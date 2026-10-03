@@ -169,7 +169,7 @@ export default class {
   }
 
   sum(args) {
-    return this.flatten(args).reduce((p, c) => p+(isNaN(parseInt(c)) ? 0 : parseInt(c)), 0)
+    return this.flatten(args).reduce((p, c) => p + (isNaN(Number(c)) ? 0 : Number(c)), 0)
   }
 
   date(value) {
@@ -238,8 +238,8 @@ export default class {
     let parsed
 
     expression = expression
-      .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9\*])+\b/g, '$1[$2]')
-      .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9\*])\.+\b/g, '$1[$2].')
+      .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9]+|\*)\b/g, '$1[$2]')
+      .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9]+|\*)\.+\b/g, '$1[$2].')
 
     expression = replaceWildcardsExpr(expression, dataPath)
 
@@ -278,13 +278,13 @@ export default class {
       .filter(m => !!m)
       .reduce((prev, e) => {
         e = replaceWildcardsExpr(e
-          .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9\*])+\b/g, '$1[$2]')
-          .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9\*])\.+\b/g, '$1[$2].')
+          .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9]+|\*)\b/g, '$1[$2]')
+          .replace(/([a-zA-Z_-][a-zA-Z0-9_-]*)\.([0-9]+|\*)\.+\b/g, '$1[$2].')
         , dataPath)
 
         e = e
-          .replace(/\[([0-9\*])+\]/g, '._$1_')
-          .replace(/\[([0-9\*])+\]\./g, '._$1_.')
+          .replace(/\[([0-9]+|\*)\]/g, '._$1_')
+          .replace(/\[([0-9]+|\*)\]\./g, '._$1_.')
 
         return [
           ...prev,

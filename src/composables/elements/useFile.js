@@ -84,7 +84,9 @@ const base = function(props, context, dependencies)
     const endpoints = {}
     
     Object.keys(propEndpoints).forEach((name) => {
-      let endpoint = configEndpoints[name]
+      let endpoint = configEndpoints[name] && typeof configEndpoints[name] === 'object'
+        ? { ...configEndpoints[name] }
+        : configEndpoints[name]
 
       if (endpoint === false) {
         endpoint = f => f
@@ -103,7 +105,9 @@ const base = function(props, context, dependencies)
       
       if (typeof propEndpoints[name] === 'string') {
         if (configEndpoints[propEndpoints[name]] !== undefined) {
-          endpoint = configEndpoints[propEndpoints[name]]
+          endpoint = typeof configEndpoints[propEndpoints[name]] === 'object'
+            ? { ...configEndpoints[propEndpoints[name]] }
+            : configEndpoints[propEndpoints[name]]
         } else {
           endpoint.url = propEndpoints[name]
         }

@@ -111,7 +111,7 @@ const Factory = class {
                 else if (isArray(subcondition)) {
                   return this.createConditionFromArray(subcondition)(form$, Validator, el$)
                 } else {
-                  return condition(form$, Validator, el$)
+                  return subcondition(form$, Validator, el$)
                 }
               })
             } else {
@@ -132,7 +132,7 @@ const Factory = class {
         }
         else if (isArray(condition[0])) {
           condition.forEach((subcondition) => {
-            if (typeof subcondition === 'string') {
+            if (typeof subcondition[0] === 'string' && subcondition.length === 1) {
               parsed.dependents.push(...this.getExprDeps(subcondition[0]))
             }
             else if (isArray(subcondition)) {

@@ -1,4 +1,4 @@
-import { computed, toRefs, ref, onMounted, watch } from 'vue'
+import { computed, toRefs, ref, onMounted, onBeforeUnmount, watch } from 'vue'
 
 const base = function(props, context, dependencies, /* istanbul ignore next: address element unimplemented */ options_ = {})
 {
@@ -140,6 +140,14 @@ const base = function(props, context, dependencies, /* istanbul ignore next: add
   
   onMounted(() => {
     initLocationService()
+  })
+
+  onBeforeUnmount(() => {
+    try {
+      locationService.value?.destroy()
+    } catch (e) {
+      // provider script may not be loaded, nothing to clean up
+    }
   })
   
   return {

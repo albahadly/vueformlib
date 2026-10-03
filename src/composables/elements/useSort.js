@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
 import Sortable from 'sortablejs'
-import { computed, toRefs, ref, watch, onMounted } from 'vue'
+import { computed, toRefs, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 
 const base = function(props, context, dependencies, options)
 {
@@ -124,6 +124,10 @@ const base = function(props, context, dependencies, options)
     if (isSortable.value) {
       initSortable()
     }
+  })
+
+  onBeforeUnmount(() => {
+    destroySortable()
   })
   
   watch(length, (n) => {

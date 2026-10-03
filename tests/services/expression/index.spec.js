@@ -300,6 +300,30 @@ describe('Expression Service', () => {
         expect(result.value).toBe(expected)
       })
     })
+
+    it('should not truncate decimals in SUM() and AVG()', () => {
+      let form = createForm({
+        schema: {
+          numbers: { type: 'list', element: { type: 'text' }, default: [1.5, 2.5] },
+          sum: { type: 'text', expression: '{SUM(numbers)}' },
+          avg: { type: 'text', expression: '{AVG(numbers)}' },
+        }
+      })
+
+      expect(form.vm.el$('sum').value).toBe('4')
+      expect(form.vm.el$('avg').value).toBe('2')
+    })
+
+    it('should reference list items with multi-digit indexes', () => {
+      let form = createForm({
+        schema: {
+          numbers: { type: 'list', element: { type: 'text' }, default: [...Array(12).keys()].map(i => i * 10) },
+          result: { type: 'text', expression: '{numbers.11}' }
+        }
+      })
+
+      expect(form.vm.el$('result').value).toBe('110')
+    })
     
     it('should use ROUND()', () => {
       let form = createForm({

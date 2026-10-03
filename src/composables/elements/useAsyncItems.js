@@ -2,7 +2,7 @@ import each from 'lodash/each'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
-import { toRefs, ref, computed, watch, inject, nextTick } from 'vue'
+import { toRefs, ref, computed, watch, inject, nextTick, onBeforeUnmount } from 'vue'
 import localize from './../../utils/localize'
 import replaceWildcards from './../../utils/replaceWildcards'
 import dataEquals from './../../utils/dataEquals'
@@ -271,6 +271,7 @@ const base = function(props, context, dependencies)
       await nextTick()
 
       watchers.value.forEach(unwatch => unwatch())
+      watchers.value = []
 
       let match
       while ((match = regex.exec(url)) !== null) {
@@ -299,6 +300,13 @@ const base = function(props, context, dependencies)
 
     return resolvedUrl
   }
+
+  // =============== HOOKS ================
+
+  onBeforeUnmount(() => {
+    watchers.value.forEach(unwatch => unwatch())
+    watchers.value = []
+  })
 
   return {
     resolveOptions,
